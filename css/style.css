@@ -1,53 +1,261 @@
-.select-container {
-    position: relative;
-    display: inline-block;
-    width: 200px;
-    height: 30px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header>h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #D04F4F;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+header>input {
+    width: 80vw;
+    height: 69px;
+    background-color: #E7E7E7;
+    border-radius: 5px;
+    border-color: transparent;
+    padding-left: 20px;
+    font-size: 18px;
+
+}
+
+header>input::placeholder {
+    padding-left: 20px;
+    color: #C7BEBE;
+    font-size: 18px;
+}
+
+#selected-keyword {
+    display: flex;
+    margin-top: 20px;
+}
+
+#select-container>div>input::placeholder {
+    color: #E7E7E7;
+}
+
+#selected-keyword-ingredients>span {
+    background-color: #3282F7;
+    color: #E7E7E7;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 5px;
+}
+
+#selected-keyword-ingredients>span::after {
+    background-color: #3282F7;
+    content: 'x';
+    color: #E7E7E7;
+    border: 1px solid #E7E7E7;
+    border-radius: 100px;
+    padding: 2px 6px;
+    margin-left: 8px;
+}
+
+#selected-keyword-appareils>span {
+    background-color: #68D9A4;
+    color: #E7E7E7;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 5px;
+}
+
+#selected-keyword-appareils>span::after {
+    background-color: #68D9A4;
+    content: 'x';
+    color: #E7E7E7;
+    border: 1px solid #E7E7E7;
+    border-radius: 100px;
+    padding: 2px 6px;
+    margin-left: 8px;
+}
+
+#selected-keyword-ustensiles>span {
+    background-color: #D04F4F;
+    color: #E7E7E7;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 5px;
+}
+
+#selected-keyword-ustensiles>span::after {
+    background-color: #D04F4F;
+    content: 'x';
+    color: #E7E7E7;
+    border: 1px solid #E7E7E7;
+    border-radius: 100px;
+    padding: 2px 6px;
+    margin-left: 8px;
+}
+
+
+#select-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.filter-ingredients {
+    background: #3282F7;
+    padding-right: 25px;
+    border-radius: 8px;
+}
+
+.filter-appareils {
+    background: #68D9A4;
+    padding-right: 25px;
+    border-radius: 8px;
+}
+
+.filter-ustensiles {
+    background: #D04F4F;
+    padding-right: 25px;
+    border-radius: 8px;
+}
+
+#select-container input {
+    color: #E7E7E7;
     font-size: 16px;
-    line-height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 20px 10px;
+    border-radius: 10px;
+    border: none;
+}
+
+#ingredient {
+    background-color: #3282F7;
+}
+
+#appareil {
+    background-color: #68D9A4;
+}
+
+#ustensil {
+    background-color: #D04F4F;
+}
+
+#select-container>div>div {
+    width: 600px;
+    height: 600px;
+    display: none;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    overflow-y: scroll;
+}
+
+#select-dropdown-ingredients {
+    background-color: #3282F7;
+}
+
+#select-dropdown-appareils {
+    background-color: #68D9A4;
+    ;
+}
+
+#select-dropdown-ustensiles {
+    background-color: #D04F4F;
+}
+
+
+#select-dropdown-ingredients p,
+#select-dropdown-appareils p,
+#select-dropdown-ustensiles p {
+    width: 160px;
+    height: 35px;
+    font-size: 14px;
+    color: #E7E7E7;
+    padding: 5px 10px;
+    margin: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+#card-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#card-container>div {
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+    height: 360px;
+    margin-bottom: 50px;
+}
+
+#card-container>div>div:first-child {
+    height: 178px;
+    background-color: #C7BEBE;
+}
+
+#card-container>div>div:last-child {
+    height: 186px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 20px;
+    justify-content: space-between;
+    background-color: #E7E7E7;
+}
+
+#card-container>div>div:last-child>h2 {
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+#card-container>div>div:last-child>strong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+#card-container>div>div:last-child>strong::before {
+    content: url("../assets/svg/clock.svg");
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    padding-right: 8px;
+}
+
+
+#card-container>div>div:last-child>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#card-container>div>div:last-child>div>ul {
+    width: 165px;
+    padding: 0;
     overflow: hidden;
 }
 
-.select-container input {
-    width: 100%;
-    height: 100%;
-    padding: 0 10px;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: #333;
-    font-size: inherit;
-    line-height: inherit;
-    box-sizing: border-box;
-}
-
-.select-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 999;
-    display: none;
-    max-height: 200px;
-    overflow-y: auto;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.select-dropdown.show {
-    display: block;
-}
-
-.select-option {
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.select-option:hover {
-    background-color: #eee;
+#card-container>div>div:last-child>div>p {
+    width: 171px;
+    height: 85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
