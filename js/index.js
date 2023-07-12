@@ -6,6 +6,7 @@ const selectedUstensils = document.getElementById('selected-keyword-ustensiles')
 const selectedIngredients = document.getElementById('selected-keyword-ingredients');
 const selectedAppliances = document.getElementById('selected-keyword-appareils');
 
+// Crée une carte de recette à partir des données de la recette
 function creerCarte(recipe) {
     const card = document.createElement('div');
     const cardImg = document.createElement('div');
@@ -45,6 +46,7 @@ function creerCarte(recipe) {
     return card;
 }
 
+// Affiche toutes les cartes de recettes
 function afficherCardContainer() {
     const cardContainer = document.getElementById('card-container');
     cardContainer.innerHTML = '';
@@ -54,121 +56,105 @@ function afficherCardContainer() {
     });
 }
 
-afficherCardContainer();
-
+// Vérifie si au moins un ingrédient de la liste est présent dans la recette
 function isIngredientInRecipe(wordsList, recipe) {
-    let ingredientsMatch = false;
     if (wordsList.length === 0) {
-        return true;
+        return true; // Si la liste est vide, toutes les recettes sont valides
     }
-    if (wordsList.length > 0) {
-        const recipeIngredients = recipe.ingredients;
-        for (let j = 0; j < recipeIngredients.length; j++) {
-            const ingredient = recipeIngredients[j].ingredient.toLowerCase();
-            if (wordsList.indexOf(ingredient) >= 0) {
-                ingredientsMatch = true;
-            }
-        }
-    }
-    return ingredientsMatch
+
+    // Convertit les ingrédients de la recette en minuscules pour la comparaison
+    const recipeIngredients = recipe.ingredients.map(ingredientObj => ingredientObj.ingredient.toLowerCase());
+
+    // Vérifie si au moins un ingrédient de la liste est présent dans les ingrédients de la recette
+    return wordsList.some(ingredient => recipeIngredients.includes(ingredient));
 }
 
+// Vérifie si au moins un ustensile de la liste est présent dans la recette
 function isUstensilInRecipe(wordsList, recipe) {
-    let ustensilsMatch = false;
     if (wordsList.length === 0) {
-        return true;
+        return true; // Si la liste est vide, toutes les recettes sont valides
     }
-    if (wordsList.length > 0) {
-        const recipeUstensils = recipe.ustensils;
-        for (let j = 0; j < recipeUstensils.length; j++) {
-            const ustensil = recipeUstensils[j].toLowerCase();
-            if (wordsList.indexOf(ustensil) >= 0) {
-                ustensilsMatch = true;
-            }
-        }
-    }
-    return ustensilsMatch
+
+    // Convertit les ustensiles de la recette en minuscules pour la comparaison
+    const recipeUstensils = recipe.ustensils.map(ustensil => ustensil.toLowerCase());
+
+    // Vérifie si au moins un ustensile de la liste est présent dans les ustensiles de la recette
+    return wordsList.some(ustensil => recipeUstensils.includes(ustensil));
 }
 
+// Vérifie si l'appareil de la recette correspond à l'un des mots de la liste
 function isApplianceInRecipe(wordsList, recipe) {
-    let applianceMatch = false;
     if (wordsList.length === 0) {
-        return true;
+        return true; // Si la liste est vide, toutes les recettes sont valides
     }
-    if (wordsList.length > 0) {
-        const appliance = recipe.appliance.toLowerCase();
-        if (wordsList.indexOf(appliance) >= 0) {
-            applianceMatch = true;
-        }
-    }
-    return applianceMatch
+
+    // Convertit l'appareil de la recette en minuscules pour la comparaison
+    const appliance = recipe.appliance.toLowerCase();
+
+    // Vérifie si l'appareil de la recette correspond à l'un des mots de la liste
+    return wordsList.includes(appliance);
 }
 
+
+// Filtre les recettes en fonction des filtres sélectionnés
 function filterRecipes() {
-    const selectedUstensilsWords = [];
-    const selectedIngredientsWords = [];
-    const selectedAppliancesWords = [];
+    // Récupère les mots-clés des ustensiles sélectionnés
+    const selectedUstensilsWords = Array.from(selectedUstensils.children).map(span => span.innerHTML.toLowerCase());
 
-    // Récupérer les mots-clés sélectionnés pour les ustensiles
-    const selectedUstensilsList = selectedUstensils.children;
-    for (let i = 0; i < selectedUstensilsList.length; i++) {
-        const span = selectedUstensilsList[i];
-        selectedUstensilsWords.push(span.innerHTML.toLowerCase());
-    }
+    // Récupère les mots-clés des ingrédients sélectionnés
+    const selectedIngredientsWords = Array.from(selectedIngredients.children).map(span => span.innerHTML.toLowerCase());
 
-    // Récupérer les mots-clés sélectionnés pour les ingrédients
-    const selectedIngredientsList = selectedIngredients.children;
-    for (let i = 0; i < selectedIngredientsList.length; i++) {
-        const span = selectedIngredientsList[i];
-        selectedIngredientsWords.push(span.innerHTML.toLowerCase());
-    }
+    // Récupère les mots-clés des appareils sélectionnés
+    const selectedAppliancesWords = Array.from(selectedAppliances.children).map(span => span.innerHTML.toLowerCase());
 
-    // Récupérer les mots-clés sélectionnés pour les appareils
-    const selectedAppliancesList = selectedAppliances.children;
-    for (let i = 0; i < selectedAppliancesList.length; i++) {
-        const span = selectedAppliancesList[i];
-        selectedAppliancesWords.push(span.innerHTML.toLowerCase());
-    }
+    // Filtre les recettes en fonction des filtres sélectionnés
+    const filteredRecipes = actualRecipes.filter(recipe => {
+        const ustensilsMatch = isUstensilInRecipe(selectedUstensilsWords, recipe);
+        const ingredientsMatch = isIngredientInRecipe(selectedIngredientsWords, recipe);
+        const applianceMatch = isApplianceInRecipe(selectedAppliancesWords, recipe);
 
-    const filteredRecipes = [];
+        // Retourne true si la recette correspond à tous les filtres sélectionnés
+        return ustensilsMatch && ingredientsMatch && applianceMatch;
+    });
 
-    // Filtrer les recettes
-    for (let i = 0; i < actualRecipes.length; i++) {
-        const recipe = actualRecipes[i];
-
-        let ustensilsMatch = isUstensilInRecipe(selectedUstensilsWords, recipe)
-        let ingredientsMatch = isIngredientInRecipe(selectedIngredientsWords, recipe)
-        let applianceMatch = isApplianceInRecipe(selectedAppliancesWords, recipe)
-
-        console.log(applianceMatch, ingredientsMatch, ustensilsMatch)
-
-        // Ajouter la recette filtrée si tous les critères sont respectés
-        if (ustensilsMatch && ingredientsMatch && applianceMatch) {
-            filteredRecipes.push(recipe);
-        }
-    }
-
+    // Filtre et affiche les cartes de recettes correspondantes
     filtrerCards(filteredRecipes);
+
+    // Crée le contenu des dropdowns de filtres pour les recettes filtrées
     createFilter(filteredRecipes);
 }
 
+// Filtre les cartes de recettes en fonction d'une recherche
 const mainSearch = document.getElementById('recherche');
 mainSearch.addEventListener('keyup', filterRecipes);
 
 function filtrerCards(filteredRecipes) {
+    // Récupère la valeur de la recherche en convertissant en minuscules
     const recherche = document.getElementById('recherche').value.toLowerCase();
+
+    // Récupère le conteneur des cartes de recettes
     const cardContainer = document.getElementById('card-container');
+
+    // Efface le contenu précédent du conteneur des cartes de recettes
     cardContainer.innerHTML = '';
 
+    // Vérifie si la recherche contient au moins 3 caractères
     if (recherche.length >= 3) {
+        // Parcourt les recettes filtrées
         for (let i = 0; i < filteredRecipes.length; i++) {
             const recipe = filteredRecipes[i];
+
+            // Vérifie si le nom de la recette, la description ou l'appareil contiennent la recherche
             if (recipe.name.toLowerCase().includes(recherche) || recipe.description.toLowerCase().includes(recherche) || recipe.appliance.toLowerCase().includes(recherche)) {
+                // Crée une carte de recette à partir de la recette filtrée
                 const card = creerCarte(recipe);
+
+                // Ajoute la carte au conteneur des cartes de recettes
                 cardContainer.appendChild(card);
             }
         }
     } else {
+        // Si la recherche contient moins de 3 caractères, affiche toutes les recettes filtrées
         for (let i = 0; i < filteredRecipes.length; i++) {
             const recipe = filteredRecipes[i];
             const card = creerCarte(recipe);
@@ -177,19 +163,61 @@ function filtrerCards(filteredRecipes) {
     }
 }
 
+// Filtre des items du dropdown
+function filterDropdownItems(input, dropdownContainer) {
+    // Récupère la valeur de saisie de l'utilisateur en convertissant en minuscules
+    const filter = input.value.toLowerCase();
 
+    // Récupère tous les éléments <p> du dropdown
+    const dropdownItems = dropdownContainer.getElementsByTagName('p');
 
+    // Parcourt chaque élément du dropdown
+    Array.from(dropdownItems).forEach(item => {
+        // Récupère le texte de l'élément en minuscules
+        const itemText = item.innerHTML.toLowerCase();
+
+        // Vérifie si le texte de l'élément contient la valeur de filtre
+        if (itemText.includes(filter)) {
+            // Affiche l'élément s'il correspond au filtre
+            item.style.display = 'block';
+        } else {
+            // Masque l'élément s'il ne correspond pas au filtre
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Écouteurs d'événements pour filtrer les dropdowns de filtres
+const inputIngredient = document.getElementById('ingredient');
+inputIngredient.addEventListener('keyup', () => {
+    filterDropdownItems(inputIngredient, filterContainerIngredients);
+});
+
+const inputAppareil = document.getElementById('appareil');
+inputAppareil.addEventListener('keyup', () => {
+    filterDropdownItems(inputAppareil, filterContainerAppliances);
+});
+
+const inputUstensil = document.getElementById('ustensil');
+inputUstensil.addEventListener('keyup', () => {
+    filterDropdownItems(inputUstensil, filterContainerUstensils);
+});
+
+// Crée le contenu des dropdowns de filtres
 function createFilter(filters) {
+    // Crée des ensembles (Set) pour stocker les valeurs uniques des ustensiles, ingrédients et appareils
     const uniqueUstensils = new Set();
     const uniqueIngredients = new Set();
     const uniqueAppliances = new Set();
 
+    // Vide le contenu des conteneurs des dropdowns de filtres
     filterContainerUstensils.innerHTML = '';
     filterContainerIngredients.innerHTML = '';
     filterContainerAppliances.innerHTML = '';
 
-
+    // Parcourt les filtres des recettes filtrées
     filters.forEach(filter => {
+        // Vérifie si le filtre a des ustensiles et les ajoute à l'ensemble unique
         if (Array.isArray(filter.ustensils)) {
             filter.ustensils.forEach(word => {
                 const trimmedWord = word.trim();
@@ -199,6 +227,7 @@ function createFilter(filters) {
             });
         }
 
+        // Vérifie si le filtre a des ingrédients et les ajoute à l'ensemble unique
         if (Array.isArray(filter.ingredients)) {
             filter.ingredients.forEach(ingredient => {
                 if (typeof ingredient.ingredient === 'string') {
@@ -210,6 +239,7 @@ function createFilter(filters) {
             });
         }
 
+        // Vérifie si le filtre a un appareil et l'ajoute à l'ensemble unique
         if (typeof filter.appliance === 'string') {
             const trimmedAppliance = filter.appliance.trim();
             if (trimmedAppliance.length > 0) {
@@ -218,15 +248,18 @@ function createFilter(filters) {
         }
     });
 
+    // Convertit les ensembles en tableaux triés
     const sortedUstensils = Array.from(uniqueUstensils).sort();
     const sortedIngredients = Array.from(uniqueIngredients).sort();
     const sortedAppliances = Array.from(uniqueAppliances).sort();
 
+    // Parcourt les ustensiles triés et crée des éléments <p> pour les ajouter au conteneur du dropdown d'ustensiles
     sortedUstensils.forEach(filter => {
         const p = document.createElement('p');
         p.innerHTML = filter;
         filterContainerUstensils.appendChild(p);
 
+        // Ajoute un événement de clic à chaque élément <p> pour ajouter ou supprimer des filtres sélectionnés
         p.addEventListener('click', () => {
             const selectedUstensil = p.innerHTML;
             const span = document.createElement('span');
@@ -234,20 +267,25 @@ function createFilter(filters) {
             selectedUstensils.appendChild(span);
             filterContainerUstensils.removeChild(p);
 
+            // Ajoute un événement de clic à chaque filtre sélectionné pour le supprimer et mettre à jour les recettes filtrées
             span.addEventListener('click', () => {
                 selectedUstensils.removeChild(span);
                 filterContainerUstensils.appendChild(p);
                 filterRecipes();
             });
+
+            // Met à jour les recettes filtrées en fonction des filtres sélectionnés
             filterRecipes();
         });
     });
 
+    // Parcourt les ingrédients triés et crée des éléments <p> pour les ajouter au conteneur du dropdown d'ingrédients
     sortedIngredients.forEach(filter => {
         const p = document.createElement('p');
         p.innerHTML = filter;
         filterContainerIngredients.appendChild(p);
 
+        // Ajoute un événement de clic à chaque élément <p> pour ajouter ou supprimer des filtres sélectionnés
         p.addEventListener('click', () => {
             const selectedIngredient = p.innerHTML;
             const span = document.createElement('span');
@@ -255,20 +293,25 @@ function createFilter(filters) {
             selectedIngredients.appendChild(span);
             filterContainerIngredients.removeChild(p);
 
+            // Ajoute un événement de clic à chaque filtre sélectionné pour le supprimer et mettre à jour les recettes filtrées
             span.addEventListener('click', () => {
                 selectedIngredients.removeChild(span);
                 filterContainerIngredients.appendChild(p);
                 filterRecipes();
             });
+
+            // Met à jour les recettes filtrées en fonction des filtres sélectionnés
             filterRecipes();
         });
     });
 
+    // Parcourt les appareils triés et crée des éléments <p> pour les ajouter au conteneur du dropdown d'appareils
     sortedAppliances.forEach(filter => {
         const p = document.createElement('p');
         p.innerHTML = filter;
         filterContainerAppliances.appendChild(p);
 
+        // Ajoute un événement de clic à chaque élément <p> pour ajouter ou supprimer des filtres sélectionnés
         p.addEventListener('click', () => {
             const selectedAppliance = p.innerHTML;
             const span = document.createElement('span');
@@ -276,22 +319,34 @@ function createFilter(filters) {
             selectedAppliances.appendChild(span);
             filterContainerAppliances.removeChild(p);
 
+            // Ajoute un événement de clic à chaque filtre sélectionné pour le supprimer et mettre à jour les recettes filtrées
             span.addEventListener('click', () => {
                 selectedAppliances.removeChild(span);
                 filterContainerAppliances.appendChild(p);
                 filterRecipes();
             });
+
+            // Met à jour les recettes filtrées en fonction des filtres sélectionnés
             filterRecipes();
         });
     });
+
+    // Filtre les éléments du dropdown des ingrédients en fonction de la saisie de l'utilisateur
+    filterDropdownItems(inputIngredient, filterContainerIngredients);
+
+    // Filtre les éléments du dropdown des appareils en fonction de la saisie de l'utilisateur
+    filterDropdownItems(inputAppareil, filterContainerAppliances);
+
+    // Filtre les éléments du dropdown des ustensiles en fonction de la saisie de l'utilisateur
+    filterDropdownItems(inputUstensil, filterContainerUstensils);
 }
 
-
-
+// Crée les filtres et affiche les cartes de recettes initiales
 let actualRecipes = recipes;
-
 createFilter(actualRecipes);
+afficherCardContainer();
 
+// Écouteurs d'événements pour les dropdowns de filtres
 filterContainerUstensils.addEventListener('click', filterRecipes);
 filterContainerIngredients.addEventListener('click', filterRecipes);
 filterContainerAppliances.addEventListener('click', filterRecipes);
